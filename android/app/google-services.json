@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "1038153810475",
+    "firebase_url": "https://unilesson-f7953.firebaseio.com",
+    "project_id": "unilesson-f7953",
+    "storage_bucket": "unilesson-f7953.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038153810475:android:cd67a99e2fa2901e",
+        "android_client_info": {
+          "package_name": "com.example.unilesson"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038153810475-ildf1emscubedtilb684bduct69n36d7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOOVSc9XLdzfm1D2oGHMrWjosKJ9wL_tw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038153810475-ildf1emscubedtilb684bduct69n36d7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1038153810475-hcmrmiv47lmo6hflmfqeh31ub1pimhf2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.unilessonAdmin"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038153810475:android:8fda565573d9d32a",
+        "android_client_info": {
+          "package_name": "com.example.unilessonAdmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1038153810475-ildf1emscubedtilb684bduct69n36d7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOOVSc9XLdzfm1D2oGHMrWjosKJ9wL_tw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038153810475-ildf1emscubedtilb684bduct69n36d7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1038153810475-hcmrmiv47lmo6hflmfqeh31ub1pimhf2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.unilessonAdmin"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
