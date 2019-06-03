@@ -9,35 +9,61 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'package:algolia/algolia.dart';
 
-
 class LessonManager {
-
-  static void addNewLesson(DocumentReference newDoc, String uid, String downloadURL, String description, String tags, String citta, String provincia, String regione, double lat, double lgt) {
+  static addNewLesson(
+      DocumentReference newDoc,
+      String uid,
+      String downloadURL,
+      String description,
+      String tags,
+      String citta,
+      String provincia,
+      String regione,
+      double lat,
+      double lgt) {
     var user = Auth.getUser(uid);
-        
-        user.listen((data) {
-                    print(downloadURL);
-                    newDoc.setData(new Lesson(
-                            userID: data.userID,
-                            lessonID: newDoc.documentID,
-                            name: data.name,
-                            surname: data.surname,
-                            university: data.university,
-                            rank: 0,
-                            cdl: data.cdl,
-                            email: data.email,
-                            profilePictureURL: data.profilePictureURL,
-                            bannerPictureURL: downloadURL,
-                            number: data.number,
-                            description: description,
-                            tags: tags,
-                            citta: citta,
-                            provincia: provincia,
-                            regione: regione,
-                            lat: lat,
-                            lgt: lgt,
-                            )
-                        .toJson());
-                  });
+    user.listen((data) async {
+      Lesson nl = new Lesson(
+        userID: data.userID,
+        lessonID: newDoc.documentID,
+        name: data.name,
+        surname: data.surname,
+        university: data.university,
+        rank: 0,
+        cdl: data.cdl,
+        email: data.email,
+        profilePictureURL: data.profilePictureURL,
+        bannerPictureURL: downloadURL,
+        number: data.number,
+        description: description,
+        tags: tags,
+        citta: citta,
+        provincia: provincia,
+        regione: regione,
+        lat: lat,
+        lgt: lgt,
+      );
+      newDoc.setData(nl.toJson());
+      Algolia algolia = Application.algolia;
+      AlgoliaTask taskAdded;
+      taskAdded =
+          await algolia.instance.index('lessons').addObject(nl.toJson());
+      print('leziona aggiunta ad algolia: ' + taskAdded.data.toString());
+    });
+  }
+
+  static removeLesson(String lessonID) async {
+   //Firestore.instance.collection('lessons').document(lessonID).delete().catchError((e){print(e);});
+    Algolia algolia = Application.algolia;
+    AlgoliaTask taskDeleted;
+    AlgoliaQuery query = algolia.instance.index('lessons').search(lessonID);
+   AlgoliaQuerySnapshot snap = await query.getObjects();
+   //print(snap.hits.first.objectID);
+    AlgoliaObjectSnapshot obj = await algolia.instance.index('lessons').object(snap.hits.first.objectID).getObject();
+    taskDeleted = await algolia.instance.index('lessons').object(obj.objectID).deleteObject();
+    print(taskDeleted.toString());
+    //print(snap.hits.first.objectID);
+
+
   }
 }

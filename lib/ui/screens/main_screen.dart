@@ -17,7 +17,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  int _currentIndex = 1;
+  int _currentIndex = 0;
   //FirebaseUser firebaseUser;
 
 
@@ -65,7 +65,7 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home), title: Text('Home')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.library_books), title: Text('Lezioni')),
+              icon: Icon(Icons.add_to_photos), title: Text('Lezione')),
           BottomNavigationBarItem(
               icon: Icon(Icons.face), title: Text('Profilo')), 
         ],

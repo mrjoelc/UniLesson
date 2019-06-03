@@ -2,19 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:unilesson_admin/ui/widgets/favoriteStar.dart';
+import 'package:unilesson_admin/ui/widgets/trash.dart';
 
 class CustomCard extends StatefulWidget {
+  final String lessonID;
   final String bannerURL;
   final String userURL;
   final String nameUser;
   final String citta;
   final String regione;
-  final int rank;
+  final String rank;
   bool favorite = false;
 
   CustomCard(
-      {this.bannerURL,
+      {this.lessonID,
+      this.bannerURL,
       this.userURL,
       this.nameUser,
       this.citta,
@@ -23,6 +25,7 @@ class CustomCard extends StatefulWidget {
 
   Map<String, Object> toJson() {
     return {
+      'lessonID' : lessonID,
       'bannerURL': bannerURL,
       'userURL': userURL,
       'nameUser': nameUser,
@@ -35,6 +38,7 @@ class CustomCard extends StatefulWidget {
 
   factory CustomCard.fromJson(Map<String, Object> doc) {
     CustomCard cc = new CustomCard(
+      lessonID: doc['lessonID'],
       bannerURL: doc['bannerURL'],
       userURL: doc['userURL'],
       nameUser: doc['nameUser'],
@@ -114,7 +118,7 @@ class _CustomCard extends State<CustomCard> {
               ),
               new Icon(Icons.star, color: Colors.amber, size: _blockSize * 7),
               new Text('${widget.rank}', style: TextStyle(fontSize: 14)),
-              FavoriteWidget(widget.favorite),
+              TrashButton(widget.lessonID),
             ],
           ),
         ]));

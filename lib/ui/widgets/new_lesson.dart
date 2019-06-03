@@ -41,6 +41,7 @@ class _NewLessonPage extends State<NewLessonPage> {
   String downloadURL;
   bool _blackVisible = false;
   VoidCallback onBackPress;
+  VoidCallback onBackPress1;
   double lat;
   double lng;
   String citta;
@@ -264,11 +265,11 @@ class _NewLessonPage extends State<NewLessonPage> {
                         regione, 
                         lat, 
                         lng);
-        
-        onBackPress();
+        _showAlert(title: 'Lezione aggiunta', content : "La nuova lezione è stata aggiunta all'elenco delle tue lezioni.", onPressed: onBackPress);
+        _changeBlackVisible();
       } catch (e) {
         print("Errore nell'inserimento");
-        _showErrorAlert(
+        _showAlert(
           title: "Inserimento fallito",
           onPressed: _changeBlackVisible,
         );
@@ -321,7 +322,7 @@ class _NewLessonPage extends State<NewLessonPage> {
     return url;
   }
 
-  void _showErrorAlert({String title, String content, VoidCallback onPressed}) {
+  void _showAlert({String title, String content, VoidCallback onPressed}) {
     showDialog(
       barrierDismissible: false,
       context: context,
