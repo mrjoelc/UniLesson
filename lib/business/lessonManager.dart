@@ -48,21 +48,18 @@ class LessonManager {
       AlgoliaTask taskAdded;
       taskAdded =
           await algolia.instance.index('lessons').addObject(nl.toJson());
-      print('leziona aggiunta ad algolia: ' + taskAdded.data.toString());
+      print('Aggiunta lezione algolia + firestore ' + newDoc.documentID);
     });
   }
 
   static removeLesson(String lessonID) async {
-   //Firestore.instance.collection('lessons').document(lessonID).delete().catchError((e){print(e);});
+    Firestore.instance.collection('lessons').document(lessonID).delete().catchError((e){print(e);});
     Algolia algolia = Application.algolia;
-    AlgoliaTask taskDeleted;
     AlgoliaQuery query = algolia.instance.index('lessons').search(lessonID);
-   AlgoliaQuerySnapshot snap = await query.getObjects();
-   //print(snap.hits.first.objectID);
+    AlgoliaQuerySnapshot snap = await query.getObjects();
     AlgoliaObjectSnapshot obj = await algolia.instance.index('lessons').object(snap.hits.first.objectID).getObject();
-    taskDeleted = await algolia.instance.index('lessons').object(obj.objectID).deleteObject();
-    print(taskDeleted.toString());
-    //print(snap.hits.first.objectID);
+    await algolia.instance.index('lessons').object(obj.objectID).deleteObject();
+    print('Rimossa lezione algolia + firestore ' + lessonID);
 
 
   }

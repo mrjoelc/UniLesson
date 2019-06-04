@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:unilesson_admin/business/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,9 +28,24 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
+  refresh(bool v) {
+     setState(() {
+        print('dentroRefresh');
+    });
+  }
+
+  refreshToHome(bool v) {
+     v ? setState(() {
+        _currentIndex=0;
+         print('dentroRefreshToHome');
+    }) : print('FuoriRefreshToHome');
+    
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _children = [MainHome(widget.firebaseUser), NewLessonPage(widget.firebaseUser), MainUserProfile(widget.firebaseUser)];
+    final List<Widget> _children = [MainHome(UniqueKey(), widget.firebaseUser, refresh), NewLessonPage(widget.firebaseUser, refreshToHome), MainUserProfile(widget.firebaseUser)];
 
     return Scaffold(
       key: _scaffoldKey,

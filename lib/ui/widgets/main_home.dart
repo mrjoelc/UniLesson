@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +16,9 @@ import 'custom_text_field.dart';
 
 class MainHome extends StatefulWidget {
   final FirebaseUser user;
+  final Function(bool v) notifyParent;
 
-  MainHome(this.user);
+  MainHome(Key key, this.user, this.notifyParent) : super(key: key);
 
   @override
   _MainHome createState() => new _MainHome();
@@ -24,9 +27,18 @@ class MainHome extends StatefulWidget {
 class _MainHome extends State<MainHome> {
   final TextEditingController _search = new TextEditingController();
 
+  refresh() {
+    Timer(const Duration(milliseconds: 2000), () {
+      setState(() {
+        widget.notifyParent(true);
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    
   }
 
   @override
@@ -55,52 +67,53 @@ class _MainHome extends State<MainHome> {
             return new ListView(
               children: <Widget>[
                 Container(
-                padding: EdgeInsets.only(top: _height / 20, left: _height / 35, right: _height / 35),
-                child: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      new CircleAvatar(
-                        backgroundImage: (snapshot.data.profilePictureURL != '')
-                            ? NetworkImage(snapshot.data.profilePictureURL)
-                            : AssetImage("assets/img/face.png"),
-                        radius: _height / 30,
-                      ),
-                      new SizedBox(
-                        height: 30,
-                      ),
-                      new Text(
-                        "Ciao " + snapshot.data.name + '.',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
+                  padding: EdgeInsets.only(
+                      top: _height / 20,
+                      left: _height / 35,
+                      right: _height / 35),
+                  child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        new CircleAvatar(
+                          backgroundImage: (snapshot.data.profilePictureURL !=
+                                  '')
+                              ? NetworkImage(snapshot.data.profilePictureURL)
+                              : AssetImage("assets/img/face.png"),
+                          radius: _height / 30,
                         ),
-                      ),
-                      new SizedBox(
-                        height: 20,
-                      ),
-                      new Text(
-                        "Sembra che oggi sia la giornata giusta per aiutare qualcuno.",
-                        style: TextStyle(fontSize: 15, color: Colors.black87),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(top: 30.0, right: 0),
-                          child: new Text(
-                            'Le tue lezioni',
-                            style: TextStyle(fontSize: 23),
-                          )),
-                      new SizedBox(
-                        height: 20,
-                      ),
-
-                    ]),
-
-                    ),
-                SearchList(widget.user),
+                        new SizedBox(
+                          height: 30,
+                        ),
+                        new Text(
+                          "Ciao " + snapshot.data.name + '.',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        new SizedBox(
+                          height: 20,
+                        ),
+                        new Text(
+                          "Sembra che oggi sia la giornata giusta per aiutare qualcuno.",
+                          style: TextStyle(fontSize: 15, color: Colors.black87),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(top: 30.0, right: 0),
+                            child: new Text(
+                              'Le tue lezioni',
+                              style: TextStyle(fontSize: 23),
+                            )),
+                        new SizedBox(
+                          height: 20,
+                        ),
+                      ]),
+                ),
+                SearchList(UniqueKey(), widget.user, refresh),
               ],
             );
           }
         });
-
   }
 
   // Widget buildSearchButton(keyword, FirebaseUser user) => new FlatButton(

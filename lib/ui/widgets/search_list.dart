@@ -8,7 +8,8 @@ import 'package:unilesson_admin/ui/widgets/custom_card.dart';
 
 class SearchList extends StatefulWidget {
   final FirebaseUser user;
-  SearchList(this.user);
+  final Function() notifyParent;
+  SearchList(Key key, this.user, this.notifyParent) : super(key: key);
 
   @override
   _SearchList createState() => new _SearchList();
@@ -16,6 +17,13 @@ class SearchList extends StatefulWidget {
 
 class _SearchList extends State<SearchList> {
   Algolia algolia = Application.algolia;
+
+  refresh() {
+  setState(() {
+     widget.notifyParent();
+  });
+  
+}
 
   @override
   void initState() {
@@ -57,6 +65,7 @@ class _SearchList extends State<SearchList> {
                 return Column(
                   children: snapshot.data.map<Widget>((data) {
                     return new CustomCard(
+                        notifyParent: refresh,
                         lessonID: data.data["lessonID"],
                         bannerURL: data.data["bannerPictureURL"],
                         userURL: data.data["profilePictureURL"],

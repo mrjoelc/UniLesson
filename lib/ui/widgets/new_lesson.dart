@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:core';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,25 +7,21 @@ import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_webservice/places.dart';
-import 'package:unilesson_admin/business/auth.dart';
 import 'package:unilesson_admin/business/lessonManager.dart';
-import 'package:unilesson_admin/models/lesson.dart';
 import "package:unilesson_admin/ui/widgets/custom_text_field.dart";
 import 'package:unilesson_admin/business/validator.dart';
 import 'package:flutter/services.dart';
-import 'package:unilesson_admin/models/user.dart';
 import 'package:unilesson_admin/ui/widgets/custom_flat_button.dart';
-import 'package:unilesson_admin/ui/widgets/custom_dropdownMenu.dart';
 import 'package:unilesson_admin/ui/widgets/custom_alert_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:unilesson_admin/business/get_uni_data.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
-import 'package:geocoder/geocoder.dart';
+import 'package:unilesson_admin/ui/widgets/search_list.dart';
 
 class NewLessonPage extends StatefulWidget {
   final FirebaseUser user;
-  NewLessonPage(this.user);
+  final Function(bool v) notifyParent;
+  NewLessonPage(this.user, this.notifyParent);
 
   _NewLessonPage createState() => _NewLessonPage();
 }
@@ -47,6 +44,7 @@ class _NewLessonPage extends State<NewLessonPage> {
   String citta;
   String regione;
   String provincia;
+
 
   @override
   initState() {
@@ -247,26 +245,24 @@ class _NewLessonPage extends State<NewLessonPage> {
         Validator.validateImg(_image) &&
         citta != null &&
         provincia != null &&
-        regione != null) 
-    {
+        regione != null) {
       try {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
         _changeBlackVisible();
         var newDoc = Firestore.instance.collection('lessons').document();
         downloadURL = await uploadImage(_image, newDoc.documentID);
-        LessonManager.addNewLesson(
-                        newDoc, 
-                        widget.user.uid, 
-                        downloadURL,
-                        description, 
-                        tags, 
-                        citta, 
-                        provincia, 
-                        regione, 
-                        lat, 
-                        lng);
-        _showAlert(title: 'Lezione aggiunta', content : "La nuova lezione è stata aggiunta all'elenco delle tue lezioni.", onPressed: onBackPress);
+        LessonManager.addNewLesson(newDoc, widget.user.uid, downloadURL,
+            description, tags, citta, provincia, regione, lat, lng);
+        _showAlert(
+            title: 'Lezione aggiunta',
+            content:
+                "La nuova lezione è stata aggiunta all'elenco delle tue lezioni.",
+            onPressed: onBackPress);
         _changeBlackVisible();
+        Timer(const Duration(milliseconds: 2000), () {
+          SearchList(UniqueKey(), widget.user, widget.notifyParent(true));
+          widget.notifyParent(true);
+        });
       } catch (e) {
         print("Errore nell'inserimento");
         _showAlert(

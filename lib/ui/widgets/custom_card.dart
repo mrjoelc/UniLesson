@@ -13,18 +13,23 @@ class CustomCard extends StatefulWidget {
   final String regione;
   final String rank;
   bool favorite = false;
+  final Function() notifyParent;
 
   CustomCard(
-      {this.lessonID,
+      {
+      Key key,
+      this.notifyParent,
+      this.lessonID,
       this.bannerURL,
       this.userURL,
       this.nameUser,
       this.citta,
       this.regione,
-      this.rank});
+      this.rank}) : super(key: key);
 
   Map<String, Object> toJson() {
     return {
+      'notifyParent' : notifyParent,
       'lessonID' : lessonID,
       'bannerURL': bannerURL,
       'userURL': userURL,
@@ -38,6 +43,7 @@ class CustomCard extends StatefulWidget {
 
   factory CustomCard.fromJson(Map<String, Object> doc) {
     CustomCard cc = new CustomCard(
+      notifyParent: doc['notifyParent'],
       lessonID: doc['lessonID'],
       bannerURL: doc['bannerURL'],
       userURL: doc['userURL'],
@@ -58,6 +64,13 @@ class CustomCard extends StatefulWidget {
 }
 
 class _CustomCard extends State<CustomCard> {
+
+  refresh() {
+  setState(() {
+    widget.notifyParent();
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
@@ -66,7 +79,7 @@ class _CustomCard extends State<CustomCard> {
     final _blockSizeVertical = _height / 100;
 
     return new Container(
-        height: _blockSizeVertical *31,
+        height: _blockSizeVertical *36,
         width: _width,
         margin: EdgeInsets.only(bottom: 12.5, top: 12.5, left: 25, right: 25),
         decoration: new BoxDecoration(
@@ -81,7 +94,7 @@ class _CustomCard extends State<CustomCard> {
             ]),
         child: new Column(children: <Widget>[
           Container(
-            height: _blockSizeVertical * 22,
+            height: _blockSizeVertical * 27,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(20.0),
@@ -118,7 +131,7 @@ class _CustomCard extends State<CustomCard> {
               ),
               new Icon(Icons.star, color: Colors.amber, size: _blockSize * 7),
               new Text('${widget.rank}', style: TextStyle(fontSize: 14)),
-              TrashButton(widget.lessonID),
+              TrashButton(UniqueKey(), widget.lessonID, refresh)
             ],
           ),
         ]));

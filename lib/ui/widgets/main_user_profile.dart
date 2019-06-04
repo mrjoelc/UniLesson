@@ -63,12 +63,6 @@ class _MainUserProfile extends State<MainUserProfile> {
                                   'Università', snapshot.data.university),
                               buildInfoChild('Corso di Laurea di appartenenza',
                                   snapshot.data.cdl),
-                              new Row(
-                                children: <Widget>[
-                                  buildLessonsButton(),                                  
-                                  //buildEditButton()
-                                ],
-                              )
                             ]),
                           ])))));
         }
@@ -133,14 +127,6 @@ Widget buildInfoButton() => new Container(
         textAlign: TextAlign.center,
         style: TextStyle(color: Colors.redAccent[700]),
       ),
-    );
-
-Widget buildLessonsButton() => new FlatButton(
-      onPressed: () {},
-      colorBrightness: Brightness.dark,
-      color: Colors.redAccent[700],
-      child: Text("Elenco lezioni"),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
     );
 
 Widget buildEditButton() => new FloatingActionButton(

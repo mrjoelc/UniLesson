@@ -8,7 +8,8 @@ import 'package:unilesson_admin/ui/widgets/custom_flat_button.dart';
 
 class TrashButton extends StatefulWidget {
   String lessonID;
-  TrashButton(this.lessonID) ;
+  final Function() notifyParent;
+  TrashButton(Key key, this.lessonID, this.notifyParent) : super(key: key);
 
   @override
   _TrashButton createState() => _TrashButton();
@@ -107,9 +108,11 @@ class _TrashButton extends State<TrashButton> {
                             textColor: Colors.white,
                             onPressed: () async {
                               await LessonManager.removeLesson(widget.lessonID);
-                              setState(() {
-                                Navigator.of(context).pop(true);
-                              });
+                              Navigator.of(context).pop(true);
+                              widget.notifyParent();
+                              
+                              
+
                             },
                             color: Colors.redAccent[700],
                             splashColor: Colors.black12,
