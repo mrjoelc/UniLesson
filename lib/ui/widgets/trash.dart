@@ -1,9 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:unilesson_admin/business/lessonManager.dart';
-import 'package:unilesson_admin/ui/screens/main_screen.dart';
-import 'package:unilesson_admin/ui/screens/root_screen.dart';
-import 'package:unilesson_admin/ui/widgets/custom_alert_dialog.dart';
 import 'package:unilesson_admin/ui/widgets/custom_flat_button.dart';
 
 class TrashButton extends StatefulWidget {
@@ -16,32 +12,32 @@ class TrashButton extends StatefulWidget {
 }
 
 class _TrashButton extends State<TrashButton> {
-
-   @override
+  @override
   void initState() {
     super.initState();
   }
+
   // ···
   @override
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _blockSize = _width / 100;
     return Container(
-      //margin: EdgeInsets.only(bottom:_blockSize * 2),
-      child: IconButton(
-        icon: Icon(Icons.delete, size: _blockSize * 7),
-        color: Colors.red[500],
-        onPressed: _rmv
-      ));
-    
+        //margin: EdgeInsets.only(bottom:_blockSize * 2),
+        child: IconButton(
+            icon: Icon(Icons.delete, size: _blockSize * 6),
+            color: Colors.red[500],
+            onPressed: _rmv));
   }
 
-  Future<bool> _rmv() async {
+  _rmv() async {
     print(widget.lessonID);
     //LessonManager.removeLesson(widget.lessonID);
     var d = await _showDialog();
-    if(d.toString() == 'true') 
-    return false;
+    if (d.toString() == 'true') {
+      widget.notifyParent();
+      LessonManager.removeLesson(widget.lessonID);
+    }
   }
 
   Future<bool> _showDialog() {
@@ -107,12 +103,9 @@ class _TrashButton extends State<TrashButton> {
                             fontSize: 14,
                             textColor: Colors.white,
                             onPressed: () async {
-                              await LessonManager.removeLesson(widget.lessonID);
+                              // await LessonManager.removeLesson(widget.lessonID);
                               Navigator.of(context).pop(true);
-                              widget.notifyParent();
-                              
-                              
-
+                              //
                             },
                             color: Colors.redAccent[700],
                             splashColor: Colors.black12,

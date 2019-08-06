@@ -9,6 +9,7 @@ class User {
   final String email;
   final String profilePictureURL;
   final String number;
+  final String role;
 
   User({
     this.userID,
@@ -18,11 +19,13 @@ class User {
     this.cdl,
     this.email,
     this.profilePictureURL, 
-    this.number,
+    this.number, 
+    this.role,
   });
 
   Map<String, Object> toJson() {
     return {
+      'role': role,
       'userID': userID,
       'name': name,
       'surname' : surname,
@@ -37,6 +40,7 @@ class User {
 
   factory User.fromJson(Map<String, Object> doc) {
     User user = new User(
+      role: doc['role'],
       userID: doc['userID'],
       name: doc['name'],
       surname: doc['surname'],

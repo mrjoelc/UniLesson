@@ -1,52 +1,80 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:unilesson_admin/business/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:unilesson_admin/models/user.dart';
+import 'package:unilesson_admin/ui/screens/welcome_screen.dart';
+import 'package:unilesson_admin/ui/widgets/main_favorites.dart';
+import 'package:unilesson_admin/ui/widgets/main_home_student.dart';
+import 'package:unilesson_admin/ui/widgets/main_home_teacher.dart';
 import 'package:unilesson_admin/ui/widgets/main_user_profile.dart';
-import 'package:unilesson_admin/ui/widgets/main_home.dart';
-import 'package:unilesson_admin/ui/widgets/custom_card.dart';
 import 'package:unilesson_admin/ui/widgets/new_lesson.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreenStudent extends StatefulWidget {
   final FirebaseUser firebaseUser;
+  String role;
+  Function notifyParent;
 
-  MainScreen({this.firebaseUser});
+  MainScreenStudent({this.firebaseUser, this.role});
 
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreenStudent> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _currentIndex = 0;
-  //FirebaseUser firebaseUser;
+  List<Widget> _childrenStudent;
 
+  bool isTeacher;
 
   @override
   void initState() {
     super.initState();
+
+    _childrenStudent = [
+      MainHomeStudent(widget.firebaseUser),
+      MainFavorites(widget.firebaseUser),
+      MainUserProfile(widget.firebaseUser)
+    ];
   }
 
   refresh(bool v) {
-     setState(() {
-        print('dentroRefresh');
+    setState(() {
+      print('dentroRefresh');
     });
   }
 
   refreshToHome(bool v) {
-     v ? setState(() {
-        _currentIndex=0;
-         print('dentroRefreshToHome');
-    }) : print('FuoriRefreshToHome');
-    
+    v
+        ? setState(() {
+            _currentIndex = 0;
+            print('dentroRefreshToHome');
+          })
+        : print('FuoriRefreshToHome');
   }
-
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _children = [MainHome(UniqueKey(), widget.firebaseUser, refresh), NewLessonPage(widget.firebaseUser, refreshToHome), MainUserProfile(widget.firebaseUser)];
+    return  studentScaffold();
+  }
 
+  void _logOut() async {
+    Auth.signOut();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => WelcomeScreen()),
+      (Route<dynamic> route) => false,
+    );
+  }
+
+
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+
+  Widget studentScaffold() {
     return Scaffold(
       key: _scaffoldKey,
       appBar: new AppBar(
@@ -55,9 +83,11 @@ class _MainScreenState extends State<MainScreen> {
         leading: new IconButton(
             icon: new Icon(Icons.menu),
             onPressed: () => _scaffoldKey.currentState.openDrawer()),
-        title: Image(image: AssetImage('assets/img/logo.png'), width: 50,),
+        title: Image(
+          image: AssetImage('assets/img/logo.png'),
+          width: 50,
+        ),
         centerTitle: true,
-        
       ),
       drawer: Drawer(
         child: ListView(
@@ -76,15 +106,15 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      body:  _children[_currentIndex],
+      body:  _childrenStudent[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home), title: Text('Home')),
+              icon: Icon(Icons.favorite),
+              title: Text('Lezione')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.add_to_photos), title: Text('Lezione')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.face), title: Text('Profilo')), 
+              icon: Icon(Icons.face), title: Text('Profilo')),
         ],
         currentIndex: _currentIndex,
         fixedColor: Colors.white,
@@ -92,16 +122,5 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: Colors.redAccent[700],
       ),
     );
-  }
-
-
-  void _logOut() async {
-    Auth.signOut();
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
   }
 }

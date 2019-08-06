@@ -20,36 +20,35 @@ class Lesson {
   final String regione;
   final String provincia;
 
-  Lesson({
-    this.lessonID,
-    this.name,
-    this.surname,
-    this.university,
-    this.cdl,
-    this.email,
-    this.profilePictureURL, 
-    this.number,
-    this.description,
-    this.tags, 
-    this.bannerPictureURL,
-    this.lat,
-    this.lgt,
-    this.citta,
-    this.provincia,
-    this.regione,
-    this.rank,
-    this.userID
-  });
+  Lesson(
+      {this.lessonID,
+      this.name,
+      this.surname,
+      this.university,
+      this.cdl,
+      this.email,
+      this.profilePictureURL,
+      this.number,
+      this.description,
+      this.tags,
+      this.bannerPictureURL,
+      this.lat,
+      this.lgt,
+      this.citta,
+      this.provincia,
+      this.regione,
+      this.rank,
+      this.userID});
 
   Map<String, Object> toJson() {
     return {
       'userID': userID,
       'lessonID': lessonID,
       'name': name,
-      'surname' : surname,
+      'surname': surname,
       'university': university,
       'cdl': cdl,
-      'email':  email,
+      'email': email,
       'profilePictureURL': profilePictureURL,
       'bannerPictureURL': bannerPictureURL,
       'number': number,
@@ -59,8 +58,10 @@ class Lesson {
       'regione': regione,
       'provincia': provincia,
       'citta': citta,
-      'lat': lat,
-      'lgt': lgt,
+      '_geoloc': {
+        'lat': lat,
+        'lng': lgt,
+      },
       'rank': rank
     };
   }

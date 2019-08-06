@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:unilesson_admin/ui/screens/sign_in_screen.dart';
+import 'package:unilesson_admin/ui/screens/sign_up_screen.dart';
 import 'package:unilesson_admin/ui/widgets/custom_flat_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -54,7 +56,11 @@ class WelcomeScreen extends StatelessWidget {
               fontWeight: FontWeight.w700,
               textColor: Colors.white,
               onPressed: () {
-                Navigator.of(context).pushNamed("/signin");
+                //Navigator.of(context).pushNamed("/signin");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignInScreen()),
+                );
               },
               splashColor: Colors.black12,
               borderColor: Color.fromRGBO(212, 20, 15, 1.0),
@@ -71,7 +77,11 @@ class WelcomeScreen extends StatelessWidget {
               fontWeight: FontWeight.w700,
               textColor: Colors.black54,
               onPressed: () {
-                Navigator.of(context).pushNamed("/signup");
+                //Navigator.of(context).pushNamed("/signup");
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUpScreen()),
+                    );
               },
               splashColor: Colors.black12,
               borderColor: Colors.black12,

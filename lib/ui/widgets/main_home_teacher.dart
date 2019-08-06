@@ -5,34 +5,33 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:unilesson_admin/business/auth.dart';
-import 'package:unilesson_admin/business/validator.dart';
 import 'package:unilesson_admin/models/user.dart';
-import 'package:unilesson_admin/ui/widgets/customHotCard.dart';
-import 'package:unilesson_admin/ui/widgets/custom_alert_dialog.dart';
-import 'package:unilesson_admin/ui/widgets/custom_card.dart';
-import 'package:unilesson_admin/ui/widgets/search_list.dart';
+import 'package:unilesson_admin/ui/widgets/lessons_list.dart';
 
-import 'custom_text_field.dart';
-
-class MainHome extends StatefulWidget {
+class MainHomeTeacher extends StatefulWidget {
   final FirebaseUser user;
   final Function(bool v) notifyParent;
 
-  MainHome(Key key, this.user, this.notifyParent) : super(key: key);
+  MainHomeTeacher(Key key, this.user, this.notifyParent) : super(key: key);
 
   @override
   _MainHome createState() => new _MainHome();
 }
 
-class _MainHome extends State<MainHome> {
+class _MainHome extends State<MainHomeTeacher> {
   final TextEditingController _search = new TextEditingController();
 
   refresh() {
-    Timer(const Duration(milliseconds: 2000), () {
-      setState(() {
-        widget.notifyParent(true);
-      });
+    //SearchList(UniqueKey(), widget.user, widget.notifyParent(true));
+    //widget.notifyParent(true);
+    //SearchList(UniqueKey(), widget.user, widget.notifyParent(true));
+    // widget.notifyParent(true);
+     Timer(const Duration(milliseconds: 100), () {
+       widget.notifyParent(true);
+       //SearchList(UniqueKey(), widget.user, widget.notifyParent(true));
     });
+    //widget.notifyParent(true);
+   
   }
 
   @override
@@ -49,7 +48,6 @@ class _MainHome extends State<MainHome> {
 
   @override
   Widget build(BuildContext context) {
-    final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
 
     return StreamBuilder(
@@ -109,37 +107,10 @@ class _MainHome extends State<MainHome> {
                         ),
                       ]),
                 ),
-                SearchList(UniqueKey(), widget.user, refresh),
+                LessonsList(UniqueKey(), widget.user, refresh),
               ],
             );
           }
         });
-  }
-
-  // Widget buildSearchButton(keyword, FirebaseUser user) => new FlatButton(
-  //       onPressed: () {
-  //         // Validator.validateName(keyword.text)
-  //         //     ? Navigator.push(
-  //         //         context,
-  //         //         MaterialPageRoute(
-  //         //             builder: (context) => SearchScreen(keyword.text, user)))
-  //         //     : _showDialog();
-  //       },
-  //       colorBrightness: Brightness.dark,
-  //       color: Colors.redAccent[700],
-  //       child: Text("Cerca"),
-  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-  //     );
-
-  void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomAlertDialog(
-          title: 'Attenzione!',
-          content: 'Inserisci qualcosa prima di premere il tasto cerca.',
-        );
-      },
-    );
   }
 }

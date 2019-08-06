@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unilesson_admin/business/algolia.dart';
 import 'package:unilesson_admin/models/user.dart';
 import 'package:flutter/services.dart';
-import 'dart:async';
 import 'package:algolia/algolia.dart';
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError, UnknownError }
@@ -40,7 +39,8 @@ class Auth {
         Firestore.instance
             .document("users/${user.userID}")
             .setData(user.toJson());
-        taskAdded = await algolia.instance.index('users').addObject(user.toJson());
+        taskAdded =
+            await algolia.instance.index('users').addObject(user.toJson());
         print('user aggiunto ad algolia: ' + taskAdded.data.toString());
       } else {
         print("user ${user.name} ${user.email} exists");
@@ -75,17 +75,30 @@ class Auth {
     });
   }
 
+  static Stream<String> getRole(String userID) {
+    var a = Firestore.instance
+        .collection("users")
+        .where("userID", isEqualTo: userID)
+        .snapshots();
+    return a.map((doc)  {
+         return doc.documents.map((doc) {
+         return User.fromDocument(doc).role;
+      }).first;
+    });
+  }
+
   static String getExceptionText(Exception e) {
     if (e is PlatformException) {
+      print(e.message);
       switch (e.message) {
-        case "Non esiste un utente corrispondente con questo identificativo. L'utente potrebbe essere stato eliminato.":
+        case "There is no user record corresponding to this identifier. The user may have been deleted.":
           return 'Utente con questa email non trovato.';
           break;
-        case "La password è invalida o l'utente non ha una passwrod.":
-          return 'Passowrd invalida.';
+        case "The password is invalid or the user does not have a password.":
+          return 'Passowrd non corretta, riprovare.';
           break;
-        case "Un errore di rete (timeout, connessione persa, host irragiungibile).":
-          return 'Nessuna connessione internet.';
+        case "Network error (such as timeout, interrupted connection or unreachable host) has occurred.":
+          return 'Un errore di rete (timeout, connessione persa, host irragiungibile).';
           break;
         case "L'email scelta è gia usata da un altro utente per un altro account.":
           return 'Email già presente nel database.';

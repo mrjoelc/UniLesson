@@ -16,7 +16,7 @@ import 'package:unilesson_admin/ui/widgets/custom_alert_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
-import 'package:unilesson_admin/ui/widgets/search_list.dart';
+import 'package:unilesson_admin/ui/widgets/lessons_list.dart';
 
 class NewLessonPage extends StatefulWidget {
   final FirebaseUser user;
@@ -59,7 +59,7 @@ class _NewLessonPage extends State<NewLessonPage> {
       errorColor: Colors.red,
       controller: _description,
       hint: "Descrizione",
-      maxLines: 7,
+      maxLines: 6,
     );
 
     _tagsField = new CustomTextField(
@@ -103,7 +103,7 @@ class _NewLessonPage extends State<NewLessonPage> {
                         imageSelectorGallery();
                       },
                       child: Container(
-                          height: _blockSizeVertical * 27,
+                          height: _blockSizeVertical * 29,
                           decoration: BoxDecoration(
                               border: Border.all(
                                   width: 0.5, color: Colors.grey[400]),
@@ -229,6 +229,13 @@ class _NewLessonPage extends State<NewLessonPage> {
     setState(() {
       _blackVisible = !_blackVisible;
     });
+     Center(
+                  child: CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation<Color>(
+                      Color.fromRGBO(212, 20, 15, 1.0),
+                    ),
+                  ),
+                );
   }
 
   imageSelectorGallery() async {
@@ -260,7 +267,7 @@ class _NewLessonPage extends State<NewLessonPage> {
             onPressed: onBackPress);
         _changeBlackVisible();
         Timer(const Duration(milliseconds: 2000), () {
-          SearchList(UniqueKey(), widget.user, widget.notifyParent(true));
+          LessonsList(UniqueKey(), widget.user, widget.notifyParent(true));
           widget.notifyParent(true);
         });
       } catch (e) {

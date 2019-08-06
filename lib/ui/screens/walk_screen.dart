@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import "package:unilesson_admin/models/walkthrough.dart";
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unilesson_admin/ui/screens/welcome_screen.dart';
 import 'package:unilesson_admin/ui/widgets/custom_flat_button.dart';
 
 class WalkthroughScreen extends StatefulWidget {
@@ -9,20 +10,14 @@ class WalkthroughScreen extends StatefulWidget {
   final List<Walkthrough> pages = [
   Walkthrough(
       icon: Icons.supervisor_account,
-      title: "Non ce la farò mai!",
+      title: "Aiuta con la tua conoscenza",
       description:
-          "Hai bisogno di aiuto per superare un esame?",
+          "Sei un laureando o un laureato che vuole mettersi in gioco dando ripetizione private?",
     ),
   Walkthrough(
-    icon: Icons.clear,
-    title: "Non capisco!",
-    description: "Hai bisogno di aiuto per comprendere quell'arduo argomento?",
-  ),
-  Walkthrough(
-    icon: Icons.help_outline,
-    title: "E se non so tutto?",
-    description:
-        "Vuoi testare la tua preparazione prima dell'esame?",
+    icon: Icons.search,
+    title: "Fatti conoscere!",
+    description: "Inserisci una lezione in cui specifichi quali argomenti conosci meglio.",
   ),
   ];
 
@@ -131,7 +126,7 @@ class _WalkthroughScreenState extends State<WalkthroughScreen> {
                 padding:
                     const EdgeInsets.only(top: 50.0, right: 15.0, left: 15.0),
                 child: Text(
-                  "Hai trovato l'applicazione che fa per te!",
+                  "Non perdere tempo!",
                   softWrap: true,
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -147,7 +142,7 @@ class _WalkthroughScreenState extends State<WalkthroughScreen> {
                 padding:
                     const EdgeInsets.only(top: 50.0, right: 15.0, left: 15.0),
                 child: Text(
-                  "Troverai tante persone esperte che vogliono aiutarti, chi sceglierai?",
+                  "Entra nella community di UniLesson e mettiti all'opera.",
                   softWrap: true,
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -169,7 +164,12 @@ class _WalkthroughScreenState extends State<WalkthroughScreen> {
                   textColor: Colors.white,
                   onPressed: () {
                     widget.prefs.setBool('seen', true);
-                    Navigator.of(context).pushNamed("/root");
+                    //Navigator.of(context).pushNamed("/root");
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                      (Route<dynamic> route) => false,
+                    );
                   },
                   splashColor: Colors.black12,
                   borderColor: Colors.white,

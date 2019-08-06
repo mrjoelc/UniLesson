@@ -1,11 +1,15 @@
 import "package:flutter/material.dart";
+import 'package:unilesson_admin/models/user.dart';
+import 'package:unilesson_admin/ui/screens/main_screen_student.dart';
+import 'package:unilesson_admin/ui/screens/main_screen_teacher.dart';
 import "package:unilesson_admin/ui/widgets/custom_text_field.dart";
 import 'package:unilesson_admin/business/auth.dart';
 import 'package:unilesson_admin/business/validator.dart';
 import 'package:flutter/services.dart';
 import 'package:unilesson_admin/ui/widgets/custom_flat_button.dart';
 import 'package:unilesson_admin/ui/widgets/custom_alert_dialog.dart';
-import 'package:unilesson_admin/models/user.dart';
+
+//import 'main_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   _SignInScreenState createState() => _SignInScreenState();
@@ -139,8 +143,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void _changeBlackVisible() {
     setState(() {
-      _blackVisible = !_blackVisible;
+      _blackVisible = _blackVisible;
     });
+    
   }
 
   void _emailLogin(
@@ -150,8 +155,16 @@ class _SignInScreenState extends State<SignInScreen> {
       try {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
         _changeBlackVisible();
-        await Auth.signIn(email, password)
-            .then((uid) => Navigator.of(context).pop());
+        await Auth.signIn(email, password);
+        var user = await Auth.getCurrentFirebaseUser();
+        var isTeacher =  await Auth.getRole(user.uid).first;
+        
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => isTeacher=='teacher' ? MainScreenTeacher(firebaseUser: user) : MainScreenStudent(firebaseUser: user)),
+          (Route<dynamic> route) => false,
+        );
       } catch (e) {
         print("Errore emailLogin: $e");
         String exception = Auth.getExceptionText(e);

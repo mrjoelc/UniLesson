@@ -1,12 +1,7 @@
-import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unilesson_admin/business/algolia.dart';
 import 'package:unilesson_admin/business/auth.dart';
 import 'package:unilesson_admin/models/lesson.dart';
-import 'package:unilesson_admin/models/user.dart';
-import 'package:flutter/services.dart';
-import 'dart:async';
 import 'package:algolia/algolia.dart';
 
 class LessonManager {
@@ -45,9 +40,7 @@ class LessonManager {
       );
       newDoc.setData(nl.toJson());
       Algolia algolia = Application.algolia;
-      AlgoliaTask taskAdded;
-      taskAdded =
-          await algolia.instance.index('lessons').addObject(nl.toJson());
+      await algolia.instance.index('lessons').addObject(nl.toJson());
       print('Aggiunta lezione algolia + firestore ' + newDoc.documentID);
     });
   }
