@@ -12,12 +12,14 @@ class WalkthroughScreen extends StatefulWidget {
       icon: Icons.supervisor_account,
       title: "Aiuta con la tua conoscenza",
       description:
-          "Sei un laureando o un laureato che vuole mettersi in gioco dando ripetizione private?",
+          "Sei un laureando o un laureato che vuole mettersi in gioco dando ripetizione private? "
+          
+           "\n Inserisci una lezione in cui specifichi quali argomenti conosci meglio.",
     ),
   Walkthrough(
     icon: Icons.search,
-    title: "Fatti conoscere!",
-    description: "Inserisci una lezione in cui specifichi quali argomenti conosci meglio.",
+    title: "Qualcuno può aiutarti",
+    description: "Sei uno studente in crisi con qualche argomento impossibile da capire o materia difficile da studiare? \n Qui potrai trovare qualcuno che potrà aiutarti!",
   ),
   ];
 
